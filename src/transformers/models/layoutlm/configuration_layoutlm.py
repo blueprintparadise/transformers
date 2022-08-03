@@ -185,7 +185,7 @@ class LayoutLMOnnxConfig(OnnxConfig):
 
         # Generate a dummy bbox
         box = [48, 84, 73, 128]
-    
+        print(box
         if not framework == TensorType.PYTORCH:
             raise NotImplementedError("Exporting LayoutLM to ONNX is currently only supported for PyTorch.")
 
