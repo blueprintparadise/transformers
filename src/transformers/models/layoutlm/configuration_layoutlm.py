@@ -150,6 +150,10 @@ class LayoutLMOnnxConfig(OnnxConfig):
                 ("bbox", {0: "batch", 1: "sequence"}),
                 ("attention_mask", {0: "batch", 1: "sequence"}),
                 ("token_type_ids", {0: "batch", 1: "sequence"}),
+               # ("resized_image", {0: "batch", 1: "sequence"}),
+                ("resized_and_aligned_bounding_boxes", {0: "batch", 1: "sequence"}),
+                ("labels", {0: "batch", 1: "sequence"})
+                
             ]
         )
 
@@ -181,7 +185,7 @@ class LayoutLMOnnxConfig(OnnxConfig):
 
         # Generate a dummy bbox
         box = [48, 84, 73, 128]
-
+    
         if not framework == TensorType.PYTORCH:
             raise NotImplementedError("Exporting LayoutLM to ONNX is currently only supported for PyTorch.")
 
@@ -191,4 +195,6 @@ class LayoutLMOnnxConfig(OnnxConfig):
 
         batch_size, seq_length = input_dict["input_ids"].shape
         input_dict["bbox"] = torch.tensor([*[box] * seq_length]).tile(batch_size, 1, 1)
+        input_dict["resized_and_aligned_bounding_boxes"] = [21.5000, 45.5000, 39.5000, 49.5000]
+        input_dict["unnormalized_token_boxes"]  = [73, 205, 130, 219]
         return input_dict
